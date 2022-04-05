@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { ReactComponent as Logo} from '../../assets/Logo.svg';
 import Favourite from "../Favourite";
-import LaunchList from "./LaunchList";
+import LaunchList from "../Common/LaunchList";
 
 const ContainerDashboard = styled.div`
   background-color: #121212;
@@ -60,7 +60,7 @@ const Dashboard = () => {
   const results = useMemo(()=>{
     return launchesList.map(launches => {
       return {...launches, rocket: rocketList.find(rocket => rocket.rocket_id === launches.rocket.rocket_id)}
-    })
+    }).sort((a, b) => (a.launch_date_unix < b.launch_date_unix) ? 1 : -1)
   }
   , [rocketList, launchesList]);
 
@@ -75,7 +75,7 @@ const Dashboard = () => {
       <span onClick={()=>{setMenu('Fav')}}> Favourites </span>
     </div>
     {menu === 'All' && <LaunchList launches={results} />}
-    {menu === 'Fav' && <Favourite />}
+    {menu === 'Fav' && <Favourite launches={results} />}
 
   </ContainerDashboard>
 }
